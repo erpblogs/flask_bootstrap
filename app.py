@@ -14,7 +14,7 @@ app = Flask(__name__)
 def index():
     port = {}
     port.update({
-        'date_now': datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+        'date_now': datetime.now().strftime("%m/%d/%Y %H:%M:%S"),
     })
 
     return render_template('index.html', **port)
@@ -28,9 +28,15 @@ def time_feed():
     return Response(generate(), mimetype='text')
 
 
-@app.route('/success/<name>', methods=['POST', 'GET'])
-def success(name):
-    return f"Login success. Welcome {name}!"
+@app.route('/result/<user>')
+def result(user):
+    port = {}
+    port.update({
+        'points': {'phy': 20, 'che': 60, 'maths': 70},
+        'user': user
+    })
+
+    return render_template('result.html', **port)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -40,7 +46,7 @@ def login():
         user = request.form['nm']
     else:
         user = request.args.get('rm')
-    return redirect(url_for('success', name=user))
+    return redirect(url_for('result', user=user))
 
 
 @app.route('/guest/<name>')
