@@ -1,4 +1,6 @@
-from flask import Flask, redirect, url_for, request, render_template
+from datetime import datetime, time
+
+from flask import Flask, Response, redirect, url_for, request, render_template
 
 app = Flask(__name__)
 
@@ -10,7 +12,20 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    port = {}
+    port.update({
+        'date_now': datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+    })
+
+    return render_template('index.html', **port)
+
+
+@app.route('/time_feed')
+def time_feed():
+    def generate():
+        yield datetime.now().strftime("%m/%d/%Y %H:%M:%S")  # return also will work
+
+    return Response(generate(), mimetype='text')
 
 
 @app.route('/success/<name>', methods=['POST', 'GET'])

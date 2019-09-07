@@ -5,11 +5,24 @@
     <title>Index</title>
 </head>
 <body>
-    <div>Login</div>
-    <form action="http://localhost:5000/login" method="post">
-        <p>Enter Name:</p>
-        <p><input type="text" name="nm"/></p>
-        <p><input type="submit" value="submit"/></p>
-    </form>
+<div>Date time now: <span id="clock">{{ date_now }}</span></div>
+<form action="http://localhost:5000/login" method="post">
+    <p>Enter Name:</p>
+    <p><input type="text" name="nm"/></p>
+    <p><input type="submit" value="submit"/></p>
+</form>
+
+<script>
+    var clock = document.getElementById("clock");
+
+    setInterval(() => {
+        fetch("{{ url_for('time_feed') }}")
+            .then(response => {
+                response.text().then(t => {
+                    clock.innerHTML = t
+                })
+            });
+    }, 1000);
+</script>
 </body>
 </html>
