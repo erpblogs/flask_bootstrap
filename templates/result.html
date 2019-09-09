@@ -7,15 +7,21 @@
 <body>
 <p>Hello: {{ user }}</p>
 <table border="1">
+    <tr>
+        <th>Name</th>
+        <td colspan="2" style="text-transform: capitalize;">{{ user }}</td>
+    </tr>
     {% for key, value in points.items() %}
         <tr>
-            <th>{{ key }}</th>
-            <td>{{ value }}</td>
-            {% if value >= 50 %}
-                <td>Pass</td>
-            {% else %}
-                <td>Fail</td>
-            {% endif %}
+            <th width="100px">{{ key }}</th>
+            <td width="50px;">{{ value }}</td>
+            <td width="50px;">
+                {% if value >= 50 %}
+                Pass
+                {% else %}
+                Fail
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
 </table>

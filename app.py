@@ -28,8 +28,13 @@ def time_feed():
     return Response(generate(), mimetype='text')
 
 
-@app.route('/result/<user>')
-def result(user):
+@app.route('/result', methods=['POST', 'GET'])
+def result():
+    user = 'N/A'
+    if request.method == 'POST':
+        user = request.form['nm']
+    else:
+        user = request.args.get('rm')
     port = {}
     port.update({
         'points': {'phy': 20, 'che': 60, 'maths': 70},
@@ -39,14 +44,14 @@ def result(user):
     return render_template('result.html', **port)
 
 
-@app.route('/login', methods=['POST', 'GET'])
-def login():
-    user = 'N/A'
-    if request.method == 'POST':
-        user = request.form['nm']
-    else:
-        user = request.args.get('rm')
-    return redirect(url_for('result', user=user))
+# @app.route('/login', methods=['POST', 'GET'])
+# def login():
+#     user = 'N/A'
+#     if request.method == 'POST':
+#         user = request.form['nm']
+#     else:
+#         user = request.args.get('rm')
+#     return redirect(url_for('result'), user=user)
 
 
 @app.route('/guest/<name>')
