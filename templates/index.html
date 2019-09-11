@@ -1,33 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
     <meta charset="UTF-8">
     <title>Index</title>
     <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='clock.js') }}"></script>
 </head>
-<body>
+<body onload="startTime()">
 <div>DateTime now: <span id="clock">{{ date_now }}</span></div>
-<input type="button" onclick="sayHello()" value="Alert Date Now" />
+<br>
+<input type="button" onclick="sayHello()" value="Alert Date Now"/>
 
 <br/>
 <br/>
-<form action="http://localhost/result" method="post">
-    <p>Enter Name:</p>
-    <p><input type="text" name="nm"/></p>
-    <p><input type="submit" value="submit"/></p>
-</form>
+{% if not user_name %}
+    <p>You are not logged in.</p>
+    <br/>
+    <a href="/login">Click here to login!</a>
+{% else %}
+    <p>Logged in as {{ user_name }}</p>
+    <br/>
+    <a href="/logout">Click here to logout!</a>
+{% endif %}
+{#<form action="/" method="post">#}
+{#    <p>Enter Name:</p>#}
+{#    <p><input type="text" name="nm"/></p>#}
+{#    <p><input type="submit" value="submit"/></p>#}
+{#</form>#}
 
 
-<script>
-    var clock = document.getElementById("clock");
-
-    setInterval(() => {
-        fetch("{{ url_for('time_feed') }}")
-            .then(response => {
-                response.text().then(t => {
-                    clock.innerHTML = t
-                })
-            });
-    }, 1000);
-</script>
+{#<script>#}
+{#    var clock = document.getElementById("clock");#}
+{##}
+{#    setInterval(() => {#}
+{#        fetch("{{ url_for('time_feed') }}")#}
+{#            .then(response => {#}
+{#                response.text().then(t => {#}
+{#                    clock.innerHTML = t#}
+{#                })#}
+{#            });#}
+{#    }, 1000);#}
+{#</script>#}
 </body>
 </html>

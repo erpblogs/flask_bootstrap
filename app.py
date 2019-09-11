@@ -1,8 +1,9 @@
 from datetime import datetime, time
 
-from flask import Flask, Response, redirect, url_for, request, render_template
+from flask import Flask, Response, redirect, url_for, request, render_template, session
 
 app = Flask(__name__)
+app.secret_key = 'Any random Text'
 
 
 # @app.route('/hello/<int:id>/')
@@ -15,6 +16,13 @@ def index():
     port = {}
     port.update({
         'date_now': datetime.now().strftime("%m/%d/%Y %H:%M:%S"),
+    })
+    user_name = session.get('user_name', False)
+    if not user_name:
+        return render_template('login.html')
+
+    port.update({
+        'user_name': user_name
     })
 
     return render_template('index.html', **port)
@@ -44,14 +52,19 @@ def result():
     return render_template('result.html', **port)
 
 
-# @app.route('/login', methods=['POST', 'GET'])
-# def login():
-#     user = 'N/A'
-#     if request.method == 'POST':
-#         user = request.form['nm']
-#     else:
-#         user = request.args.get('rm')
-#     return redirect(url_for('result'), user=user)
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    # check already login
+    if request.method == 'POST':
+        session.update({'user_name': request.form['user_name']})
+        return redirect(url_for('index'))
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user_name')
+    return redirect(url_for('index'))
 
 
 @app.route('/guest/<name>')
@@ -65,6 +78,9 @@ def hello(name):
         return redirect(url_for('admin', name))
     return redirect(url_for('guest', name))
 
+@app.route('/clock')
+def clock():
+    return render_template('clock.html')
 
 if __name__ == '__main__':
     app.run(host="localhost", port=5000, debug=True)
