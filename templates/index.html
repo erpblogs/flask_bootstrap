@@ -13,6 +13,15 @@
 
 <br/>
 <br/>
+<div id="mess">
+    {% with messages = get_flashed_messages(with_categories='error') %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="padding: 20px; background-color: lightblue; color: green;"><strong>{{ message }}</strong></p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
 {% if not user_name %}
     <p>You are not logged in.</p>
     <br/>
@@ -22,12 +31,14 @@
     <br/>
     <a href="/logout">Click here to logout!</a>
 {% endif %}
-{#<form action="/" method="post">#}
-{#    <p>Enter Name:</p>#}
-{#    <p><input type="text" name="nm"/></p>#}
-{#    <p><input type="submit" value="submit"/></p>#}
-{#</form>#}
+<script>
+    {#setTimeout('$("#mess").hide()',5000);#}
+    var mess = document.getElementById("mess");
 
+    setTimeout(function () {
+        mess.style.display = 'none';
+    }, 3000);
+</script>
 
 {#<script>#}
 {#    var clock = document.getElementById("clock");#}

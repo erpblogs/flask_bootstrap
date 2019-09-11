@@ -1,6 +1,6 @@
 from datetime import datetime, time
 
-from flask import Flask, Response, redirect, url_for, request, render_template, session, abort
+from flask import Flask, Response, redirect, url_for, request, render_template, session, abort, flash
 
 app = Flask(__name__)
 app.secret_key = 'Any random Text'
@@ -55,20 +55,25 @@ def result():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     # check already login
-    if session.get('user_name', False):
-        return redirect(url_for('index'))
+    # if session.get('user_name', False) and session.get('password', False):
+    #     return redirect(url_for('index'))
     if request.method == 'POST':
-        if request.form['user_name'] == 'admin':
-            session.update({'user_name': request.form['user_name']})
+        if request.form['user_name'] == 'admin' and request.form['password'] == '1':
+            session.update({'user_name': request.form['user_name'], 'password': request.form['password']})
+            flash('You were successfully logged in')
             return redirect(url_for('index'))
+        # else:
+        #     return abort(401)
         else:
-            return abort(401)
+            error = 'Invalid username or password. Please try again!'
+            flash(error, category='error')
     return render_template('login.html')
 
 
 @app.route('/logout')
 def logout():
-    session.pop('user_name')
+    session.get('user_name', False) and session.pop('user_name')
+    session.get('password', False) and session.pop('password')
     return redirect(url_for('index'))
 
 
