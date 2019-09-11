@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Upload</title>
+    <script type="text/css" src="{{ url_for('static', filename='index.css') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
 </head>
 <body>
@@ -15,17 +16,13 @@
         {% endif %}
     {% endwith %}
 </div>
-<form action='/login' method='post'>
+
+<form action='/uploader' method='post' enctype="multipart/form-data">
     <h2>Login</h2>
-    <p>User Name <input type='text' name='user_name' required/></p>
-    <p>Password <input type='text' name='password' required/></p>
-    <p><input type='submit' value='Login'/></p>
+    <p>Name <input type='text' name='name'/></p>
+    <p>File <input type='file' name='file'/></p>
+    <p><input type='submit' value='Upload'/></p>
 </form>
-<script>
-    var mess = document.getElementById("mess");
-    setTimeout(function () {
-        mess.style.display = 'none';
-    }, 3000);
-</script>
+<script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>

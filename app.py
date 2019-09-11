@@ -1,9 +1,18 @@
+import os
 from datetime import datetime, time
 
 from flask import Flask, Response, redirect, url_for, request, render_template, session, abort, flash
+from werkzeug import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'Any random Text'
+
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))  # This is your Project Root
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[-1].lower() in ALLOWED_EXTENSIONS
 
 
 # @app.route('/hello/<int:id>/')
@@ -92,6 +101,31 @@ def hello(name):
 @app.route('/clock')
 def clock():
     return render_template('clock.html')
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def uploader():
+    return render_template('upload.html')
+
+
+@app.route('/uploader', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        name = request.form['name']
+        file = request.files['file']
+        if file.filename == '':
+            flash('No file selected for uploading')
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            new_file_name = ".".join([name, filename.split('.')[-1]])
+            file.save(os.path.join(f"{ROOT_DIR}\\store", new_file_name))
+            flash('File successfully uploaded')
+            return 'file uploaded successfully'
+        else:
+            flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
+            return redirect(request.url)
 
 
 if __name__ == '__main__':
