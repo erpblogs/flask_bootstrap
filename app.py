@@ -112,20 +112,25 @@ def uploader():
 def upload_file():
     if request.method == 'POST':
         name = request.form['name']
-        file = request.files['file']
-        if file.filename == '':
-            flash('No file selected for uploading')
-            return redirect(request.url)
+        files = request.files.getlist('file')
+        i = 0
+        for file in files:
+            i += 1
+            if file.filename == '':
+                flash('No file selected for uploading')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                if name:
+                    filename = ".".join([name + str(i), filename.split('.')[-1]])
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            new_file_name = ".".join([name, filename.split('.')[-1]])
-            file.save(os.path.join(f"{ROOT_DIR}\\store", new_file_name))
-            flash('File successfully uploaded')
-            return 'file uploaded successfully'
-        else:
-            flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
-            return redirect(request.url)
+                file.save(os.path.join(f"{ROOT_DIR}\\store", filename))
+
+            else:
+                flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
+                return redirect(request.url)
+        flash('File successfully uploaded')
+        return 'file uploaded successfully'
 
 
 if __name__ == '__main__':

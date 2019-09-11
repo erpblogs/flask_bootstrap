@@ -8,10 +8,10 @@
 </head>
 <body>
 <div id="mess">
-    {% with messages = get_flashed_messages(with_categories='error') %}
+    {% with messages = get_flashed_messages(with_categories='info') %}
         {% if messages %}
             {% for message in messages %}
-                <p style="padding: 20px; background-color: lightblue; color: red;"><strong>{{ message }}</strong></p>
+                <p style="padding: 20px; background-color: lightblue; color: green;"><strong>{{ message }}</strong></p>
             {% endfor %}
         {% endif %}
     {% endwith %}
@@ -20,7 +20,7 @@
 <form action='/uploader' method='post' enctype="multipart/form-data">
     <h2>Login</h2>
     <p>Name <input type='text' name='name'/></p>
-    <p>File <input type='file' name='file'/></p>
+    <p>File <input type='file' name='file' multiple="multiple"/></p>
     <p><input type='submit' value='Upload'/></p>
 </form>
 <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
