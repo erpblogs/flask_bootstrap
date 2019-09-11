@@ -105,4 +105,7 @@ venv.bak/
 
 .coveragerc
 .travis.yml
+.
+
+store /
 .idea
