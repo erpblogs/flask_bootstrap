@@ -1,6 +1,6 @@
 from datetime import datetime, time
 
-from flask import Flask, Response, redirect, url_for, request, render_template, session
+from flask import Flask, Response, redirect, url_for, request, render_template, session, abort
 
 app = Flask(__name__)
 app.secret_key = 'Any random Text'
@@ -55,9 +55,14 @@ def result():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     # check already login
-    if request.method == 'POST':
-        session.update({'user_name': request.form['user_name']})
+    if session.get('user_name', False):
         return redirect(url_for('index'))
+    if request.method == 'POST':
+        if request.form['user_name'] == 'admin':
+            session.update({'user_name': request.form['user_name']})
+            return redirect(url_for('index'))
+        else:
+            return abort(401)
     return render_template('login.html')
 
 
@@ -78,9 +83,11 @@ def hello(name):
         return redirect(url_for('admin', name))
     return redirect(url_for('guest', name))
 
+
 @app.route('/clock')
 def clock():
     return render_template('clock.html')
+
 
 if __name__ == '__main__':
     app.run(host="localhost", port=5000, debug=True)
