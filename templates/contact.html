@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+</head>
+<body>
+<div id="mess">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="padding: 20px; background-color: lightblue; color: green;"><strong>{{ message }}</strong></p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% for field in form %}
+        {% for message in field.errors %}
+            <p style="padding: 20px; background-color: lightblue; color: green;"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endfor %}
+
+</div>
+<form method="POST" action="/contact">
+    <div class="form_container" style=font-size:20px; font-weight:bold; margin-left:150px;>
+        {% for field in form %}
+            {% if field.name != 'csrf_token' and field.name != 'send' %}
+                <div class="form_item">
+                    <div class="field_label">{{ field.label }}</div>
+                    <div class="field_name">{{ field }} </div>
+                </div>
+            {% elif field.name != 'csrf_token' and field.name == 'send' %}
+                <div class="field_name">{{ field }}</div>
+            {% else %}
+                <div style="display: none;">{{ field.label }}</div>
+                <div style="display: none;">{{ field }} </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+</form>
+<script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>
