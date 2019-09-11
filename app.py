@@ -3,6 +3,7 @@ from datetime import datetime, time
 
 from flask import Flask, Response, redirect, url_for, request, render_template, session, abort, flash
 from werkzeug import secure_filename
+from forms import ContactForm
 
 app = Flask(__name__)
 app.secret_key = 'Any random Text'
@@ -131,6 +132,14 @@ def upload_file():
                 return redirect(request.url)
         flash('File successfully uploaded')
         return 'file uploaded successfully'
+
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
+    if form.validate_on_submit():
+        return "Success" #  redirect('/success')
+    return render_template('contact.html', form=form)
 
 
 if __name__ == '__main__':

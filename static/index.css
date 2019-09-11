@@ -1,1 +1,52 @@
+div.form_container {
+    display: grid;
+    grid-template-rows: auto;
+}
 
+div.form_item {
+    display: grid;
+    grid-template-columns: 100px auto;
+    align-items: center;
+    padding: 10px;
+    min-height: 32px;
+}
+
+.field_label {
+    color: blue;
+}
+
+.field_name > input {
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 5px;
+    border: 1px solid red;
+}
+
+.field_name > input[type=submit] {
+    width: 100px;
+    height: 32px;
+    border: 1px solid red;
+    margin-left: 110px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.field_name > input[type=submit]:hover {
+    background-color: lightblue;
+}
+
+
+.field_name > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#mess {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 100px;
+    right: 100px;
+}
